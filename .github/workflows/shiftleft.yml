@@ -4,13 +4,8 @@
 name: ShiftLeft
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
   workflow_dispatch:
-  schedule:
-    - cron: '0 1 * * *'
 
 jobs:
   NextGen-Static-Analysis:
@@ -46,7 +41,8 @@ jobs:
       run: |
         curl https://cdn.shiftleft.io/download/sl > ${GITHUB_WORKSPACE}/sl && chmod a+rx ${GITHUB_WORKSPACE}/sl
     - name: Validate Build Rules
-      run: ${GITHUB_WORKSPACE}/sl check-analysis --app shiftleft-go-demo \
+      run: |
+        ${GITHUB_WORKSPACE}/sl check-analysis --app shiftleft-go-demo \
             --branch "${{ github.head_ref || steps.extract_branch.outputs.branch }}" \
             --report \
             --github-pr-number=${{github.event.number}} \
