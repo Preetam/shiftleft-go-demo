@@ -85,6 +85,7 @@ func loginAction(w http.ResponseWriter, r *http.Request, _ httprouter.Params) bo
 	/* handler for login action */
 	uname := r.FormValue("username")
 	pass := Md5Sum(r.FormValue("password"))
+	password := r.FormValue("password")
 
 	uData := checkUserQuery(uname, pass) //handle user data from db
 	if uData.cnt == 1 {
@@ -98,6 +99,7 @@ func loginAction(w http.ResponseWriter, r *http.Request, _ httprouter.Params) bo
 		s.SetSession(w, r, sessionData)
 		util.SetCookie(w, "Uid", strconv.Itoa(uData.id)) //save user_id to cookie
 		log.Println("Login Success")
+		log.Println(password)
 		return true
 	} else {
 		return false
